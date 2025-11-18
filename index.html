@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prompt Builder</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="site-header">
+        <div class="brand">
+          <span class="brand__badge">PB</span>
+          <div>
+            <strong>Prompt Builder</strong>
+            <span>结构化提示词工作台</span>
+          </div>
+        </div>
+        
+        <div class="site-header__actions">
+          <button type="button" class="ghost ghost--tight" id="openApiSettings">API 设置</button>
+        </div>
+      </header>
+
+      <section class="hero hero--gradient" id="features">
+        <div class="hero__text">
+          <p class="hero__eyebrow">Prompt Builder · 超轻量工具链</p>
+          <h1>把模糊需求压成结构化提示词，快、准、狠。</h1>
+          <p class="hero__subtitle">
+            模板内置资深提示词工程师的流程，实时渲染右侧预览。左侧输入，右侧复制，上方 API
+            可直接串联任意兼容模型。
+          </p>
+          <div class="hero__stats">
+            <div class="hero__stat">
+              <span>4 个阶段</span>
+              <small>拆解角色、语气、交付、检查</small>
+            </div>
+            <div class="hero__stat">
+              <span>0 学习成本</span>
+              <small>字段都写明白，不需要教程</small>
+            </div>
+            <div class="hero__stat">
+              <span>100% 结构化</span>
+              <small>输出即模板，可直接复制</small>
+            </div>
+          </div>
+        </div>
+        <div class="hero__panel">
+          <article>
+            <p>角色与语气</p>
+            <h3>让 AI 先知道自己是谁</h3>
+            <p>默认模板会把能力圈定在第一人称视角，避免模型跑题。</p>
+          </article>
+          <article>
+            <p>交付标准</p>
+            <h3>输出要求一屏看完</h3>
+            <p>只要写清需求，模板立即更新，预览与复制一步到位。</p>
+          </article>
+          <article>
+            <p>AI 接口</p>
+            <h3>即刻接入</h3>
+            <p>填入 API Key 即可直连任意 /v1/chat/completions 兼容接口。</p>
+          </article>
+        </div>
+      </section>
+
+      <main class="workspace" id="workspace">
+        <div class="workspace__intro">
+          <div>
+            <p class="workspace__eyebrow">输入上下文</p>
+            <h2>补充你的需求，实时预览提示词</h2>
+            <p>这个工作台只做一件事：帮你在一分钟内得到结构化的提示词输出。</p>
+          </div>
+          <span class="workspace__badge">Beta · v0.2</span>
+        </div>
+
+        <div class="workspace__grid">
+          <section class="panel form-panel" aria-label="输入区">
+            <header class="panel__header">
+              <div>
+                <p class="panel__eyebrow">输入信息</p>
+                <h3>写完一段需求即可生成模板</h3>
+              </div>
+              <p class="panel__hint">实时同步，无需拆分字段，输入一段描述就够。</p>
+            </header>
+            <form class="form" id="promptForm">
+              <div class="form-group">
+                <label class="field">
+                  <div class="field__label">
+                    <span>原始提示词</span>
+                    <p class="field__hint">粘贴或描述你希望优化的提示词、任务及交付要求，此处越具体越好。</p>
+                  </div>
+                  <textarea id="corePrompt" rows="12" placeholder=""></textarea>
+                </label>
+              </div>
+              <div class="form__footer">
+                <button type="button" class="primary form__cta" id="generateButton">开始生成</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="panel preview" aria-label="预览区" id="preview">
+            <div class="preview__header">
+              <div>
+                <p class="panel__eyebrow">实时预览</p>
+                <h3>生成的提示词</h3>
+              </div>
+              <button type="button" class="primary secondary" id="copyButton">复制提示词</button>
+            </div>
+            <textarea id="promptOutput" readonly></textarea>
+            <p class="preview__status" aria-live="polite" id="statusMessage"></p>
+          </section>
+        </div>
+
+        <div class="workspace__grid workspace__grid--supplement">
+          <section class="panel insights">
+            <p class="panel__eyebrow">模板检查清单</p>
+            <h3>别再写“请帮我”这种废话</h3>
+            <ul>
+              <li>把角色改成第一人称，并声明最擅长的 2-3 项技能。</li>
+              <li>补充上下文来源、交付物格式和评估标准。</li>
+              <li>把“不要做什么”改成“应该做什么”。</li>
+            </ul>
+          </section>
+          <section class="panel roadmap" id="workflow">
+            <p class="panel__eyebrow">工作流</p>
+            <h3>模板是这样运转的</h3>
+            <ol>
+              <li>
+                <strong>拆 brief</strong>
+                <span>分析需求、上下文与限制条件。</span>
+              </li>
+              <li>
+                <strong>锁定角色</strong>
+                <span>把能力写成第一人称，让模型先站位。</span>
+              </li>
+              <li>
+                <strong>列交付</strong>
+                <span>写清输出格式、语气、验收标准。</span>
+              </li>
+              <li>
+                <strong>最终检查</strong>
+                <span>重读右侧模板，确保角色、语气、交付都对。</span>
+              </li>
+            </ol>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div class="modal-overlay" id="apiModal" role="dialog" aria-modal="true" aria-labelledby="apiModalTitle" hidden>
+      <div class="modal">
+        <div class="modal__header">
+          <div>
+            <p class="hero__eyebrow">API 设置</p>
+            <h3 id="apiModalTitle">OpenAI 兼容接口</h3>
+            <p class="api-config__hint">输入你的 API Key，调用任意兼容的 /v1/chat/completions 接口即可生成或优化提示词。</p>
+          </div>
+          <button type="button" class="ghost" id="closeApiSettings">关闭</button>
+        </div>
+        <div class="api-config__grid modal__grid">
+          <label class="field">
+            <span>API Base URL</span>
+            <input id="apiBase" type="text" placeholder="https://api.openai.com/v1" />
+          </label>
+          <label class="field">
+            <span>模型</span>
+            <input id="model" type="text" placeholder="gpt-4o-mini" />
+          </label>
+          <label class="field">
+            <span>API Key</span>
+            <input id="apiKey" type="password" placeholder="sk-..." autocomplete="off" />
+          </label>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
