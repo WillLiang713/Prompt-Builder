@@ -25,7 +25,6 @@
           </header>
           <form class="form" id="promptForm">
             <label class="field">
-              <span>原始提示词</span>
               <textarea
                 id="corePrompt"
                 rows="14"
@@ -43,11 +42,39 @@
               <p class="eyebrow">实时预览</p>
               <h2>结构化提示词</h2>
             </div>
-            <button type="button" class="primary secondary" id="copyButton">复制提示词</button>
+            <div class="preview__actions">
+              <button type="button" class="preview__previewButton" id="previewButton" aria-label="完整预览">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 12s3-5 10-5 10 5 10 5-3 5-10 5S2 12 2 12Z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+              <button type="button" class="primary secondary" id="copyButton">复制</button>
+            </div>
           </div>
           <textarea id="promptOutput" readonly></textarea>
           <p class="preview__status" aria-live="polite" id="statusMessage"></p>
         </section>
+
+        <div class="modal" id="previewModal" aria-hidden="true" role="dialog" aria-labelledby="modalTitle">
+          <div class="modal__overlay"></div>
+          <div class="modal__content">
+            <div class="modal__header">
+              <h3 class="modal__title" id="modalTitle">完整预览</h3>
+              <div class="modal__actions">
+                <button type="button" class="primary secondary modal__copyButton" id="modalCopyButton">复制</button>
+                <button type="button" class="modal__close" id="closeModal" aria-label="关闭预览">
+                  <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="modal__body">
+              <pre id="modalOutput"></pre>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
     <script src="config.js"></script>

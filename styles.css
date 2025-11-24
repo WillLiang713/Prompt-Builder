@@ -304,6 +304,131 @@ button:active {
   color: #34d399;
 }
 
+.preview__actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.preview__previewButton {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--secondary-bg);
+  border: 1px solid var(--secondary-border);
+  color: var(--accent);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.preview__previewButton:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 20px 36px rgba(106, 162, 255, 0.25);
+  background: var(--primary-bg-hover);
+  color: var(--primary-text);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modal[aria-hidden='true'] {
+  display: none;
+}
+
+.modal__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+}
+
+.modal__content {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  max-height: calc(100vh - 48px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 30px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal__actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.modal__title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 22px;
+}
+
+.modal__close {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--button-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  transition: transform 0.2s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.modal__close:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: var(--primary-bg-hover);
+  color: var(--primary-text);
+}
+
+.modal__body {
+  padding: 30px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+#modalOutput {
+  margin: 0;
+  font-family: 'Space Grotesk', 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
 #copyButton[data-state='copied'] {
   background: linear-gradient(135deg, #34d399, #10b981);
   color: #041005;

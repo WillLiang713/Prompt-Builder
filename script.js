@@ -55,9 +55,15 @@ const statusEl = document.getElementById('statusMessage');
 const copyButton = document.getElementById('copyButton');
 const generateButton = document.getElementById('generateButton');
 const themeToggleButton = document.getElementById('themeToggle');
+const previewButton = document.getElementById('previewButton');
+const previewModal = document.getElementById('previewModal');
+const closeModal = document.getElementById('closeModal');
+const modalOverlay = previewModal?.querySelector('.modal__overlay');
+const modalOutput = document.getElementById('modalOutput');
+const modalCopyButton = document.getElementById('modalCopyButton');
 
 const idlePreviewText = '输入您的需求，我将为您生成专业级提示词。点击生成按钮即可获得高质量结构化模板。';
-const copyButtonDefaultLabel = copyButton?.textContent?.trim() || '复制提示词';
+const copyButtonDefaultLabel = copyButton?.textContent?.trim() || '复制';
 const themeStorageKey = 'promptBuilder.theme';
 const themeIcons = {
   light: `<svg viewBox="0 0 24 24" role="presentation" focusable="false">
@@ -84,20 +90,29 @@ function setIdlePreview() {
 }
 
 function copyPrompt() {
-  outputEl.select();
-  outputEl.setSelectionRange(0, outputEl.value.length);
+  copyText(outputEl.value, copyButton);
+}
 
+function copyModalPrompt() {
+  copyText(modalOutput.textContent, modalCopyButton, false);
+}
+
+function copyText(text, button, showStatus = true) {
   const handleSuccess = () => {
-    setStatus('专业提示词已成功复制到剪贴板', 'success');
-    triggerCopyFeedback();
-    setTimeout(() => {
-      setStatus('');
-    }, 2400);
+    if (showStatus) {
+      setStatus('专业提示词已成功复制到剪贴板', 'success');
+      setTimeout(() => {
+        setStatus('');
+      }, 2400);
+    }
+    if (button) {
+      triggerCopyFeedback(button);
+    }
   };
 
   if (navigator.clipboard?.writeText) {
     navigator.clipboard
-      .writeText(outputEl.value)
+      .writeText(text)
       .then(handleSuccess)
       .catch(() => fallbackCopy(handleSuccess));
   } else {
@@ -105,16 +120,18 @@ function copyPrompt() {
   }
 }
 
-function triggerCopyFeedback() {
-  if (!copyButton) return;
-  copyButton.dataset.state = 'copied';
-  copyButton.textContent = '已复制';
-  copyButton.disabled = true;
+function triggerCopyFeedback(button) {
+  const targetButton = button || copyButton;
+  if (!targetButton) return;
+  const originalText = targetButton.textContent?.trim() || '复制';
+  targetButton.dataset.state = 'copied';
+  targetButton.textContent = '已复制';
+  targetButton.disabled = true;
   clearTimeout(copyFeedbackTimer);
   copyFeedbackTimer = setTimeout(() => {
-    copyButton.dataset.state = 'idle';
-    copyButton.textContent = copyButtonDefaultLabel;
-    copyButton.disabled = false;
+    targetButton.dataset.state = 'idle';
+    targetButton.textContent = originalText;
+    targetButton.disabled = false;
   }, 1400);
 }
 
@@ -252,6 +269,24 @@ function init() {
 
   copyButton.addEventListener('click', copyPrompt);
   generateButton.addEventListener('click', () => requestCompletion('generate'));
+
+  if (previewButton) {
+    previewButton.addEventListener('click', openPreviewModal);
+  }
+
+  if (closeModal) {
+    closeModal.addEventListener('click', closePreviewModal);
+  }
+
+  if (modalOverlay) {
+    modalOverlay.addEventListener('click', closePreviewModal);
+  }
+
+  if (modalCopyButton) {
+    modalCopyButton.addEventListener('click', copyModalPrompt);
+  }
+
+  document.addEventListener('keydown', handleEscapeKey);
 }
 
 init();
@@ -317,6 +352,11 @@ function appendStreamingText(text) {
   if (!text) return;
   outputEl.value += text;
   outputEl.scrollTop = outputEl.scrollHeight;
+
+  const isModalOpen = previewModal?.getAttribute('aria-hidden') === 'false';
+  if (isModalOpen && modalOutput) {
+    modalOutput.textContent = outputEl.value;
+  }
   setStatus('正在生成专业提示词…', 'neutral');
 }
 
@@ -424,4 +464,25 @@ function getApiConfig() {
   const model = (cfg.model || defaultApiConfig.model || '').toString().trim();
   const apiKey = (cfg.apiKey || defaultApiConfig.apiKey || '').toString().trim();
   return { apiBase, model, apiKey };
+}
+
+function openPreviewModal() {
+  if (!previewModal || !modalOutput) return;
+  modalOutput.textContent = outputEl?.value || '';
+  previewModal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  closeModal?.focus();
+}
+
+function closePreviewModal() {
+  if (!previewModal) return;
+  previewModal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  previewButton?.focus();
+}
+
+function handleEscapeKey(event) {
+  if (event.key === 'Escape' && previewModal?.getAttribute('aria-hidden') === 'false') {
+    closePreviewModal();
+  }
 }
