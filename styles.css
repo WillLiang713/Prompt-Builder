@@ -283,7 +283,7 @@ button:active {
   padding: 20px;
   resize: vertical;
   background: var(--input-bg);
-  font-family: 'Space Grotesk', 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-family: 'JetBrains Mono', 'Sarasa Gothic SC', 'Fira Code', Consolas, monospace;
   line-height: 1.6;
   color: var(--text);
   font-weight: 500;
@@ -421,7 +421,7 @@ button:active {
 
 #modalOutput {
   margin: 0;
-  font-family: 'Space Grotesk', 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-family: 'JetBrains Mono', 'Sarasa Gothic SC', 'Fira Code', Consolas, monospace;
   font-size: 16px;
   line-height: 1.7;
   color: var(--text);
